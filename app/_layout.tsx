@@ -3,20 +3,13 @@ import { useFonts } from "expo-font"
 import { useEffect } from "react"
 import ContextProvider from "@/context/Context"
 import * as SplashScreen from "expo-splash-screen"
+import { fonts } from "@/constants"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-	const [loaded] = useFonts({
-		"Jakarta-Bold": require("../assets/fonts/PlusJakartaSans-Bold.ttf"),
-		"Jakarta-ExtraBold": require("../assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
-		"Jakarta-ExtraLight": require("../assets/fonts/PlusJakartaSans-ExtraLight.ttf"),
-		"Jakarta-Light": require("../assets/fonts/PlusJakartaSans-Light.ttf"),
-		"Jakarta-Medium": require("../assets/fonts/PlusJakartaSans-Medium.ttf"),
-		"Jakarta-Regular": require("../assets/fonts/PlusJakartaSans-Regular.ttf"),
-		"Jakarta-SemiBold": require("../assets/fonts/PlusJakartaSans-SemiBold.ttf"),
-	})
+	const [loaded] = useFonts(fonts)
 
 	useEffect(() => {
 		if (loaded) {
@@ -32,6 +25,8 @@ export default function RootLayout() {
 		<ContextProvider>
 			<Stack>
 				<Stack.Screen name="index" options={{ headerShown: false }} />
+				<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+				<Stack.Screen name="(root)" options={{ headerShown: false }} />
 				<Stack.Screen name="+not-found" />
 			</Stack>
 		</ContextProvider>

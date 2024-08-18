@@ -1,5 +1,6 @@
 import { colors } from "./Colors"
+import { fonts } from "./Fonts"
 import { images } from "./Images"
 import { icons } from "./Icons"
 
-export { colors, images, icons }
+export { colors, fonts, images, icons }
