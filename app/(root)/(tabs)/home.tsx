@@ -1,16 +1,23 @@
-import { Text, StatusBar } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { SignedIn, SignedOut, useUser } from "@clerk/clerk-expo"
+import { Link } from "expo-router"
+import { Text, View } from "react-native"
 
 export default function Home() {
-	return (
-		<SafeAreaView className={styles.area}>
-			<Text className={styles.text}>Home</Text>
-			<StatusBar barStyle={"default"} />
-		</SafeAreaView>
-	)
-}
+	const { user } = useUser()
 
-const styles = {
-	area: "flex-1 items-center justify-center bg-white",
-	text: "text-red-500",
+	return (
+		<View>
+			<SignedIn>
+				<Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
+			</SignedIn>
+			<SignedOut>
+				<Link href="/sign-in">
+					<Text>Sign In</Text>
+				</Link>
+				<Link href="/sign-up">
+					<Text>Sign Up</Text>
+				</Link>
+			</SignedOut>
+		</View>
+	)
 }
