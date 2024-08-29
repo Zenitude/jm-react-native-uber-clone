@@ -1,18 +1,41 @@
-import { Text, ScrollView, View, Image } from "react-native"
+import { Text, ScrollView, View, Image, Alert } from "react-native"
 import { images, icons } from "@/constants"
-import { Link } from "expo-router"
-import { useState } from "react"
+import { Link, router } from "expo-router"
+import { useCallback, useState } from "react"
 import Button from "@/components/Button"
 import InputField from "@/components/InputField"
 import OAuth from "@/components/OAuth"
+import { useSignIn } from "@clerk/clerk-expo"
 
 export default function SignIn() {
-	const [from, setForm] = useState({
+	const { isLoaded, signIn, setActive } = useSignIn()
+
+	const [form, setForm] = useState({
 		email: "",
 		password: "",
 	})
 
-	const onSignInPress = async () => {}
+	const onSignInPress = useCallback(async () => {
+		if (!isLoaded) return
+
+		try {
+			const signInAttempt = await signIn.create({
+				identifier: form.email,
+				password: form.password,
+			})
+
+			if (signInAttempt.status === "complete") {
+				await setActive({ session: signInAttempt.createdSessionId })
+				router.replace("/")
+			} else {
+				// See https://clerk.com/docs/custom-flows/error-handling
+				// for more info on error handling
+				console.error(JSON.stringify(signInAttempt, null, 2))
+			}
+		} catch (err: any) {
+			Alert.alert("Error", err.errors[0].longMessage)
+		}
+	}, [isLoaded, signIn, form.email, form.password, setActive])
 
 	return (
 		<ScrollView className={styles.scroll}>
@@ -35,8 +58,8 @@ export default function SignIn() {
 						iconStyle={""}
 						inputStyle={""}
 						secureTextEntry={false}
-						value={from.email}
-						onChangeText={(value: string) => setForm({ ...from, email: value })}
+						value={form.email}
+						onChangeText={(value: string) => setForm({ ...form, email: value })}
 						keyboardType={"email-address"}
 					/>
 					<InputField
@@ -47,9 +70,9 @@ export default function SignIn() {
 						iconStyle={""}
 						inputStyle={""}
 						secureTextEntry={true}
-						value={from.password}
+						value={form.password}
 						onChangeText={(value: string) =>
-							setForm({ ...from, password: value })
+							setForm({ ...form, password: value })
 						}
 						keyboardType={"default"}
 					/>

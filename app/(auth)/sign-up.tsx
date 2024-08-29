@@ -1,4 +1,4 @@
-import { Text, ScrollView, View, Image } from "react-native"
+import { Text, ScrollView, View, Image, Alert } from "react-native"
 import { images, icons, functions } from "@/constants"
 import { Link, router } from "expo-router"
 import { useState } from "react"
@@ -10,6 +10,7 @@ import { ReactNativeModal } from "react-native-modal"
 
 export default function SignUp() {
 	const { isLoaded, signUp, setActive } = useSignUp()
+	const [showSuccessModal, setShowSuccessModal] = useState(false)
 
 	const [form, setForm] = useState({
 		name: "",
@@ -39,7 +40,7 @@ export default function SignUp() {
 
 			setVerification({ ...verification, state: "pending" })
 		} catch (err: any) {
-			console.error(JSON.stringify(err, null, 2))
+			Alert.alert("Error", err.errors[0].longMessage)
 		}
 	}
 
@@ -56,7 +57,7 @@ export default function SignUp() {
 				// TODO: Create a database user!
 
 				await setActive({ session: completeSignUp.createdSessionId })
-				setVerification({ ...verification, state: "succes" })
+				setVerification({ ...verification, state: "success" })
 			} else {
 				setVerification({
 					...verification,
@@ -157,9 +158,9 @@ export default function SignUp() {
 
 				<ReactNativeModal
 					isVisible={verification.state === "pending"}
-					onModalHide={() =>
-						setVerification({ ...verification, state: "success" })
-					}
+					onModalHide={() => {
+						if (verification.state === "success") setShowSuccessModal(true)
+					}}
 				>
 					<View className={styles.containerModal}>
 						<Text className={styles.textModalVerification}>Verification</Text>
@@ -195,7 +196,7 @@ export default function SignUp() {
 					</View>
 				</ReactNativeModal>
 
-				<ReactNativeModal isVisible={verification.state === "succes"}>
+				<ReactNativeModal isVisible={showSuccessModal}>
 					<View className={styles.containerModal}>
 						<Image
 							source={images.check}
@@ -212,7 +213,10 @@ export default function SignUp() {
 							type={"text"}
 							styles={stylesButton}
 							variantStyles={stylesButtonVariant}
-							action={() => router.replace("/(root)/(tabs)/home")}
+							action={() => {
+								setShowSuccessModal(false)
+								router.replace("/(root)/(tabs)/home")
+							}}
 							textButton={"Browse Home"}
 						/>
 					</View>
@@ -233,11 +237,12 @@ const styles = {
 	link: "text-primary-500",
 	containerModal: "bg-white px-7 py-9 rounded-2xl min-h-[300px]",
 	textModalVerification: "text-2xl font-JakartaExtraBold mb-2 ",
-	textModal: "font-Jakarta mb-5",
+	textModal: "font-JakartaLight mb-5",
 	textError: "text-red-500 text-sm mt-1",
 	iconCheckModal: "w-[110px] h-[110px] mx-auto my-5",
 	textModalVerify: "text-3xl font-JakartaBold text-center",
-	textModalMessage: "text-base text-gray-400 font-Jakarta text-center mt-2",
+	textModalMessage:
+		"text-base text-gray-400 font-JakartaLight text-center mt-2",
 }
 
 const stylesButton = {

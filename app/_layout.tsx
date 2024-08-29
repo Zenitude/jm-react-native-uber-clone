@@ -5,6 +5,7 @@ import ContextProvider from "@/context/Context"
 import * as SplashScreen from "expo-splash-screen"
 import { fonts } from "@/constants"
 import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo"
+import { tokenCache } from "@/lib/auth"
 
 // eslint-disable-next-line prettier/prettier
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
@@ -33,7 +34,7 @@ export default function RootLayout() {
 
 	return (
 		<ContextProvider>
-			<ClerkProvider publishableKey={publishableKey}>
+			<ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
 				<ClerkLoaded>
 					<Stack>
 						<Stack.Screen name="index" options={{ headerShown: false }} />
