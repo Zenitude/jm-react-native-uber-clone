@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {TextInputProps, TouchableOpacityProps} from "react-native";
+import {ImageSourcePropType, TextInputProps, TouchableOpacityProps} from "react-native";
 
 declare interface Driver {
   driver_id: number;
@@ -137,4 +137,106 @@ declare interface DriverCardProps {
   item: MarkerData;
   selected: number;
   setSelected: () => void;
+}
+
+type TabBarStyleType = {
+  background?: string,
+  overflow?: string,
+  padding?: {
+    top?: number,
+    right?: number,
+    bottom?: number,
+    left?: number,
+    full?: number,
+    horizontal?: number,
+    vertical?: number,
+  },
+  margin?: {
+    top?: number,
+    right?: number,
+    bottom?: number,
+    left?: number,
+    full?: number,
+    horizontal?: number,
+    vertical?: number,
+  },
+  border?: {
+    radius?: {
+      topLeft?: number,
+      topRight?: number,
+      bottomLeft?: number,
+      bottomRight?: number,
+      full?: number,
+    },
+    width?: {
+      top?: number,
+      right?: number,
+      bottom?: number,
+      left?: number,
+      full?: number
+    },
+    color?: {
+      top?: string,
+      right?: string,
+      bottom?: string,
+      left?: string,
+      full?: string,
+    }
+  },
+  height?: number,
+  display?: "none" | "flex" | Animated.Value | Animated.AnimatedInterpolation<string | number> | undefined,
+  justifyContent?: Animated.Value | Animated.AnimatedInterpolation<string | number> | "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly",
+  alignItems?: Animated.Value | Animated.AnimatedInterpolation<string | number> | "flex-start" | "flex-end" | "center" | "stretch" | "baseline" | undefined,
+  flexDirection?: Animated.Value | Animated.AnimatedInterpolation<string | number> | "row" | "column" | "row-reverse" | "column-reverse" | undefined,
+  position?: Animated.Value | Animated.AnimatedInterpolation<string | number> | "absolute" | "relative" | "static" | undefined,
+}
+
+type TabBarProps = {
+  initial: string,
+  label: boolean,
+  iconColor: {
+    active: string,
+    inactive: string,
+  }
+  styles?: TabBarStyleType,
+  tabs: {
+    content: {
+      name: string,
+      title: string,
+      icon: ImageSourcePropType,
+    }[],
+    styles: TabIconStyleType,
+  }
+}
+
+type TabIconStyleType = {
+  tab: string,
+  containerIcon: string,
+  icon: string,
+  text: string,
+  focused: {
+    tab: string,
+    containerIcon: string,
+    icon: string,
+    text: string,
+  }
+  unfocus?: {
+    tab: string,
+    containerIcon: string,
+    icon: string,
+    text: string,
+  }
+}
+
+type TabIconType = {
+  icon: ImageSourcePropType,
+  color: string,
+  name: string,
+  focused: boolean,
+  styles: TabIconStyleType,
+}
+
+type IconType = {
+  focused : boolean;
+  color: string;
 }
