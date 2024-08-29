@@ -1,4 +1,11 @@
-import { View, TouchableOpacity, Text, Image } from "react-native"
+import {
+	View,
+	TouchableOpacity,
+	Text,
+	Image,
+	GestureResponderEvent,
+	ImageSourcePropType,
+} from "react-native"
 
 export default function Button({
 	type,
@@ -40,4 +47,24 @@ export default function Button({
 			</TouchableOpacity>
 		</View>
 	)
+}
+
+type ButtonProps = {
+	type: string,
+	styles: {
+		container: string,
+		button?: string,
+		text?: string,
+		image?: string,
+	},
+	variantStyles?: {
+		container: string,
+		button?: string,
+		text?: string,
+	},
+	action: (event: GestureResponderEvent) => void,
+	textButton?: string,
+	srcImage?: ImageSourcePropType,
+	IconLeft?: React.ComponentType<any>,
+	IconRight?: React.ComponentType<any>,
 }
