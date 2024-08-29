@@ -1,7 +1,54 @@
 import React from "react"
 import { Tabs } from "expo-router"
-import { IconType, TabBarProps } from "@/types/global"
-import { TabIcon } from "./TabIcon"
+import { View, Image, Text, ImageSourcePropType, Animated } from "react-native"
+
+const TabIcon = ({ icon, color, name, focused, styles }: TabIconType) => {
+	return (
+		<View
+			className={`${styles.tab}
+				${
+					focused
+						? styles.focused.tab
+						: `${styles.unfocus?.tab ? styles.unfocus?.tab : ""}`
+				}
+			`}
+		>
+			<View
+				className={`${styles.containerIcon}
+						${
+							focused
+								? styles.focused.containerIcon
+								: `${styles.unfocus?.containerIcon ? styles.unfocus?.containerIcon : ""}`
+						}
+					`}
+			>
+				<Image
+					className={`${styles.icon}
+						${
+							focused
+								? styles.focused.icon
+								: `${styles.unfocus?.icon ? styles.unfocus?.icon : ""}`
+						}
+					`}
+					source={icon}
+					resizeMode="contain"
+					tintColor={color}
+				/>
+			</View>
+			<Text
+				className={`${styles.text}
+					${
+						focused
+							? styles.focused.text
+							: `${styles.unfocus?.text ? styles.unfocus?.text : ""}`
+					}
+					`}
+			>
+				{name}
+			</Text>
+		</View>
+	)
+}
 
 export default function TabBar({
 	initial,
@@ -132,4 +179,140 @@ export default function TabBar({
 			))}
 		</Tabs>
 	)
+}
+
+export type TabBarStyleType = {
+	background?: string,
+	overflow?: string,
+	padding?: {
+		top?: number,
+		right?: number,
+		bottom?: number,
+		left?: number,
+		full?: number,
+		horizontal?: number,
+		vertical?: number,
+	},
+	margin?: {
+		top?: number,
+		right?: number,
+		bottom?: number,
+		left?: number,
+		full?: number,
+		horizontal?: number,
+		vertical?: number,
+	},
+	border?: {
+		radius?: {
+			topLeft?: number,
+			topRight?: number,
+			bottomLeft?: number,
+			bottomRight?: number,
+			full?: number,
+		},
+		width?: {
+			top?: number,
+			right?: number,
+			bottom?: number,
+			left?: number,
+			full?: number,
+		},
+		color?: {
+			top?: string,
+			right?: string,
+			bottom?: string,
+			left?: string,
+			full?: string,
+		},
+	},
+	height?: number,
+	display?:
+		| "none"
+		| "flex"
+		| Animated.Value
+		| Animated.AnimatedInterpolation<string | number>
+		| undefined,
+	justifyContent?:
+		| Animated.Value
+		| Animated.AnimatedInterpolation<string | number>
+		| "flex-start"
+		| "flex-end"
+		| "center"
+		| "space-between"
+		| "space-around"
+		| "space-evenly",
+	alignItems?:
+		| Animated.Value
+		| Animated.AnimatedInterpolation<string | number>
+		| "flex-start"
+		| "flex-end"
+		| "center"
+		| "stretch"
+		| "baseline"
+		| undefined,
+	flexDirection?:
+		| Animated.Value
+		| Animated.AnimatedInterpolation<string | number>
+		| "row"
+		| "column"
+		| "row-reverse"
+		| "column-reverse"
+		| undefined,
+	position?:
+		| Animated.Value
+		| Animated.AnimatedInterpolation<string | number>
+		| "absolute"
+		| "relative"
+		| "static"
+		| undefined,
+}
+
+type TabBarProps = {
+	initial: string,
+	label: boolean,
+	iconColor: {
+		active: string,
+		inactive: string,
+	},
+	styles?: TabBarStyleType,
+	tabs: {
+		content: {
+			name: string,
+			title: string,
+			icon: ImageSourcePropType,
+		}[],
+		styles: TabIconStyleType,
+	},
+}
+
+type TabIconStyleType = {
+	tab: string,
+	containerIcon: string,
+	icon: string,
+	text: string,
+	focused: {
+		tab: string,
+		containerIcon: string,
+		icon: string,
+		text: string,
+	},
+	unfocus?: {
+		tab: string,
+		containerIcon: string,
+		icon: string,
+		text: string,
+	},
+}
+
+type TabIconType = {
+	icon: ImageSourcePropType,
+	color: string,
+	name: string,
+	focused: boolean,
+	styles: TabIconStyleType,
+}
+
+type IconType = {
+	focused: boolean,
+	color: string,
 }

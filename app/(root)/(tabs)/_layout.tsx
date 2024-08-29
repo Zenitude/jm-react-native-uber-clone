@@ -1,7 +1,8 @@
 import ContextProvider from "@/context/Context"
 import { icons } from "@/constants"
 import React from "react"
-import TabBar from "@/components/navigation/TabBar"
+import TabBar from "@/components/TabBar"
+import { TabBarStyleType } from "@/components/TabBar"
 
 export default function Layout() {
 	const tabs = {
@@ -18,7 +19,7 @@ export default function Layout() {
 			<TabBar
 				initial={"index"}
 				label={false}
-				styles={stylesTabBar}
+				styles={stylesTabBar as TabBarStyleType}
 				tabs={tabs}
 				iconColor={{
 					active: "white",
