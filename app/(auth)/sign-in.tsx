@@ -28,8 +28,6 @@ export default function SignIn() {
 				await setActive({ session: signInAttempt.createdSessionId })
 				router.replace("/")
 			} else {
-				// See https://clerk.com/docs/custom-flows/error-handling
-				// for more info on error handling
 				console.error(JSON.stringify(signInAttempt, null, 2))
 			}
 		} catch (err: any) {
