@@ -6,7 +6,7 @@ import RideCard from "@/components/RideCard"
 import { useState } from "react"
 import Button from "@/components/Button"
 import GoogleTextInput from "@/components/GoogleTextInput"
-import Map from "@/components/Map"
+import GoogleMap from "@/components/GoogleMap"
 
 export default function Home() {
 	const { user } = useUser()
@@ -71,9 +71,10 @@ export default function Home() {
 						<>
 							<Text className={styles.title}>Your current Location</Text>
 							<View className={styles.containerSub}>
-								<Map />
+								<GoogleMap />
 							</View>
 						</>
+						<Text className={styles.title}>Recent Rides</Text>
 					</>
 				)}
 			/>
