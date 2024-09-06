@@ -101,6 +101,12 @@ declare interface PaymentProps {
   rideTime: number;
 }
 
+type setLocationType = {
+  latitude: number;
+  longitude: number;
+  address: string;
+}
+
 declare interface LocationStore {
   userLatitude: number | null;
   userLongitude: number | null;
@@ -110,20 +116,22 @@ declare interface LocationStore {
   destinationAddress: string | null;
   setUserLocation: (
     { latitude, longitude, address, }
-    : {
-      latitude: number;
-      longitude: number;
-      address: string;
-    }
+    : setLocationType
   ) => void;
   setDestinationLocation: (
     { latitude, longitude, address, }
-    : { 
-      latitude: number; 
-      longitude: number; 
-      address: string; 
-    }
+    : setLocationType
   ) => void;
+}
+
+type addressType = {
+  number: string | null,
+  street: string | null,
+  postalcode: string | null,
+  city: string | null,
+  region: string | null,
+  subregion: string | null,
+  country: string | null,
 }
 
 declare interface DriverStore {

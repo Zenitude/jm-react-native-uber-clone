@@ -24,5 +24,5 @@ export default function GoogleMap() {
 }
 
 const styles = {
-	mapview: "w-full h-full rounded-2xl ",
+	mapview: "w-full h-full rounded-2xl mt-5 ",
 }
