@@ -1,11 +1,23 @@
 import { Text } from "react-native"
 import React from "react"
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps"
+import { useLocationStore } from "@/store"
+import { calculateRegion } from "@/lib/map"
 
 export default function GoogleMap() {
-	// const region = {
+	const {
+		userLongitude,
+		userLatitude,
+		destinationLatitude,
+		destinationLongitude,
+	} = useLocationStore()
 
-	// }
+	const region = calculateRegion({
+		userLongitude,
+		userLatitude,
+		destinationLatitude,
+		destinationLongitude,
+	})
 
 	return (
 		<MapView
@@ -14,7 +26,7 @@ export default function GoogleMap() {
 			tintColor="black"
 			mapType="mutedStandard"
 			showsPointsOfInterest={false}
-			// initialRegion={region}
+			initialRegion={region}
 			showsUserLocation={true}
 			userInterfaceStyle={"light"}
 		>

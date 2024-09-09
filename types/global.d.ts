@@ -1,6 +1,19 @@
 /* eslint-disable prettier/prettier */
 import {TextInputProps, TouchableOpacityProps} from "react-native";
 
+type CalculateRegionType = {
+  userLatitude: number | null;
+  userLongitude: number | null;
+  destinationLatitude: number | null;
+  destinationLongitude: number | null;
+}
+
+type setLocationType = {
+  latitude: number;
+  longitude: number;
+  address: string;
+}
+
 declare interface Driver {
   driver_id: number;
   first_name: string;
@@ -74,11 +87,7 @@ declare interface GoogleInputProps {
       longitude, 
       address, 
     }
-    : {
-        latitude: number;
-        longitude: number;
-        address: string;
-    }
+    : setLocationType
   ) => void;
 }
 
@@ -99,12 +108,6 @@ declare interface PaymentProps {
   amount: string;
   driverId: number;
   rideTime: number;
-}
-
-type setLocationType = {
-  latitude: number;
-  longitude: number;
-  address: string;
 }
 
 declare interface LocationStore {
