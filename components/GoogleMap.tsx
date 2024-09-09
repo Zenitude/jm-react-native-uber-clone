@@ -1,8 +1,9 @@
-import { Text } from "react-native"
-import React from "react"
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps"
-import { useLocationStore } from "@/store"
-import { calculateRegion } from "@/lib/map"
+import React, { useEffect, useState } from "react"
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps"
+import { useDriverStore, useLocationStore } from "@/store"
+import { calculateRegion, generateMarkersFromData } from "@/lib/map"
+import { drivers, icons } from "@/constants"
+import { MarkerData } from "@/types/global"
 
 export default function GoogleMap() {
 	const {
@@ -12,12 +13,31 @@ export default function GoogleMap() {
 		destinationLongitude,
 	} = useLocationStore()
 
+	const { selectedDriver, setDrivers } = useDriverStore()
+
 	const region = calculateRegion({
 		userLongitude,
 		userLatitude,
 		destinationLatitude,
 		destinationLongitude,
 	})
+
+	const [markers, setMarkers] = useState<MarkerData[]>([])
+
+	useEffect(() => {
+		if (Array.isArray(drivers)) {
+			if (!userLatitude || !userLongitude) return
+
+			const newMarkers = generateMarkersFromData({
+				data: drivers,
+				userLatitude: userLatitude,
+				userLongitude: userLongitude,
+			})
+
+			setMarkers(newMarkers)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [drivers])
 
 	return (
 		<MapView
@@ -30,7 +50,18 @@ export default function GoogleMap() {
 			showsUserLocation={true}
 			userInterfaceStyle={"light"}
 		>
-			<Text>Map</Text>
+			{markers.map((marker) => (
+				<Marker
+					coordinate={{
+						latitude: marker.latitude,
+						longitude: marker.longitude,
+					}}
+					title={marker.title}
+					image={
+						selectedDriver === marker.id ? icons.selectedMarker : icons.marker
+					}
+				/>
+			))}
 		</MapView>
 	)
 }

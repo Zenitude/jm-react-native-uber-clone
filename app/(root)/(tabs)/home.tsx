@@ -47,7 +47,7 @@ export default function Home() {
 				latitude: location.coords?.latitude!,
 				longitude: location.coords?.longitude!
 			})
-			
+			console.log(`lat: ${location.coords.latitude}, long: ${location.coords.longitude}`)
 			const { name, street, postalCode, city, region, subregion, country } = address[0]
 			setUserLocation({
 				latitude: location.coords.latitude!,

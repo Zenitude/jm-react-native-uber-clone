@@ -5,5 +5,15 @@ import { icons } from "./Icons"
 import { onBoarding } from "./Onboarding"
 import { functions } from "./Functions"
 import recentRides from "./Rides.json"
+import drivers from "./Drivers.json"
 
-export { colors, fonts, images, icons, onBoarding, functions, recentRides }
+export {
+	colors,
+	fonts,
+	images,
+	icons,
+	onBoarding,
+	functions,
+	recentRides,
+	drivers,
+}
