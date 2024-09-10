@@ -9,7 +9,8 @@ import GoogleTextInput from "@/components/GoogleTextInput"
 import GoogleMap from "@/components/GoogleMap"
 import { useLocationStore } from "@/store"
 import * as Location from "expo-location"
-import { addressType } from "@/types/global"
+import { addressType, setLocationType } from "@/types/global"
+import { router, Href } from "expo-router"
 
 export default function Home() {
 	const { setUserLocation, setDestinationLocation } = useLocationStore()
@@ -28,7 +29,10 @@ export default function Home() {
 
 	const signOut = () => {}
 
-	const searchLocation = () => {}
+	const searchDestination = (location: setLocationType) => {
+		setDestinationLocation(location)
+		router.push("/(root)/find-ride" as Href)
+	}
 
 	useEffect(() => {
 		const requestLocation = async () => {
@@ -119,7 +123,7 @@ export default function Home() {
 						<GoogleTextInput
 							icon={icons.search}
 							containerStyle={styles.googleInput}
-							handlePress={searchLocation}
+							handlePress={searchDestination}
 						/>
 
 						<>
