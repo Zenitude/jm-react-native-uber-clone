@@ -63,7 +63,7 @@ export default function GoogleTextInput({
 				renderLeftButton={() => (
 					<View className={styles.buttonGoogle}>
 						<Image 
-							source={icons.search}
+							source={icon ?? icons.search}
 							resizeMode={"contain"}
 							className={styles.iconButtonGoogle}
 						/>

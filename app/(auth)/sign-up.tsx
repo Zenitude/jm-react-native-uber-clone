@@ -266,6 +266,6 @@ const stylesButtonVariant = {
 }
 
 const stylesButtonVerifyVariant = {
-	container: "bg-success-500",
-	text: "",
+	container: functions.getBgVariantStyle("success"),
+	text: functions.getTextVariantStyle("default"),
 }

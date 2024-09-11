@@ -1,5 +1,5 @@
 import { Text, ScrollView, View, Image, Alert } from "react-native"
-import { images, icons } from "@/constants"
+import { images, icons, functions } from "@/constants"
 import { Link, router } from "expo-router"
 import { useCallback, useState } from "react"
 import Button from "@/components/Button"
@@ -114,6 +114,6 @@ const stylesButton = {
 }
 
 const stylesButtonVariant = {
-	container: "", //functions.getBgVariantStyle("primary"),
-	text: "", //functions.getTextVariantStyle("default"),
+	container: functions.getBgVariantStyle("primary"),
+	text: functions.getTextVariantStyle("default"),
 }

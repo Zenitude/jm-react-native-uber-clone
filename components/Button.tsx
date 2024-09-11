@@ -32,6 +32,19 @@ export default function Button({
 					className={styles.image}
 				/>
 			)
+		} else if (type === "full") {
+			return (
+				<>
+					<Image
+						source={srcImage}
+						resizeMode="contain"
+						className={styles.image}
+					/>
+					<Text className={`${styles.text} ${variantStyles?.text}`}>
+						{textButton}
+					</Text>
+				</>
+			)
 		}
 	}
 
