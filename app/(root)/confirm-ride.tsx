@@ -18,7 +18,7 @@ export default function ConfirmRide() {
 					<DriverCard
 						item={item}
 						selected={selectedDriver!}
-						setSelected={() => setSelectedDriver(item.id!)}
+						setSelected={() => setSelectedDriver(Number(item.id)!)}
 					/>
 				)}
 				ListFooterComponent={() => (
