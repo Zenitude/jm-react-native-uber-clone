@@ -25,6 +25,9 @@ export default function GoogleMap() {
 	const [markers, setMarkers] = useState<MarkerData[]>([])
 
 	useEffect(() => {
+		// TODO: Remove
+		setDrivers(drivers)
+
 		if (Array.isArray(drivers)) {
 			if (!userLatitude || !userLongitude) return
 
