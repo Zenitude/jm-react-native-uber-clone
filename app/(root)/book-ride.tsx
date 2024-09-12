@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { useUser } from "@clerk/clerk-expo";
-import { Image, Text, View } from "react-native";
-import RideLayout from "@/components/RideLayout";
-import {icons, functions } from "@/constants";
-import { useDriverStore, useLocationStore } from "@/store";
-import Payment from "@/components/Payment";
+import { useUser } from "@clerk/clerk-expo"
+import { Image, Text, View } from "react-native"
+import RideLayout from "@/components/RideLayout"
+import {icons, functions } from "@/constants"
+import { useDriverStore, useLocationStore } from "@/store"
+import Payment from "@/components/Payment"
+import Stripe from "@/components/Stripe"
 
 export default function BookRide() {
     const { user } = useUser();
@@ -16,80 +17,82 @@ export default function BookRide() {
     )[0];
 
     return (
-        <RideLayout title="Book Ride">
-            <>
-                <Text className={styles.title}>
-                    Ride Information
-                </Text>
+        <Stripe>
+            <RideLayout title="Book Ride">
+                <>
+                    <Text className={styles.title}>
+                        Ride Information
+                    </Text>
 
-                <View className={styles.containerDriver}>
-                    <Image
-                        source={{uri: driverDetails?.profile_image_url}}
-                        className={styles.iconProfileDriver}
-                    />
+                    <View className={styles.containerDriver}>
+                        <Image
+                            source={{uri: driverDetails?.profile_image_url}}
+                            className={styles.iconProfileDriver}
+                        />
 
-                    <View className={styles.titleAndStars}>
-                        <Text className={styles.titleDriver}>
-                            {driverDetails?.title}
-                        </Text>
+                        <View className={styles.titleAndStars}>
+                            <Text className={styles.titleDriver}>
+                                {driverDetails?.title}
+                            </Text>
 
-                        <View className={styles.starsDriver}>
-                            <Image
-                                source={icons.star}
-                                className={styles.iconStars}
-                                resizeMode="contain"
-                            />
-                            <Text className={styles.ratingStars}>
-                                {driverDetails?.rating}
+                            <View className={styles.starsDriver}>
+                                <Image
+                                    source={icons.star}
+                                    className={styles.iconStars}
+                                    resizeMode="contain"
+                                />
+                                <Text className={styles.ratingStars}>
+                                    {driverDetails?.rating}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View
+                        className={styles.priceTimeSeats}>
+                        <View className={styles.subContainer}>
+                            <Text className={styles.label}>Ride Price</Text>
+                            <Text className={`${styles.subLabel} ${styles.price}`}>
+                                ${driverDetails?.price || 60}
+                            </Text>
+                        </View>
+
+                        <View className={styles.subContainer}>
+                            <Text className={styles.label}>Pickup Time</Text>
+                            <Text className={styles.subLabel}>
+                                {functions.formatDateTime(driverDetails?.time! || 5)}
+                            </Text>
+                        </View>
+
+                        <View className={styles.containerSeats}>
+                            <Text className={styles.label}>Car Seats</Text>
+                            <Text className={styles.subLabel}>
+                                {driverDetails?.car_seats}
                             </Text>
                         </View>
                     </View>
-                </View>
 
-                <View
-                    className={styles.priceTimeSeats}>
-                    <View className={styles.subContainer}>
-                        <Text className={styles.label}>Ride Price</Text>
-                        <Text className={`${styles.subLabel} ${styles.price}`}>
-                            ${driverDetails?.price || 60}
-                        </Text>
-                    </View>
+                    <View className={styles.containerLocations}>
+                        <View
+                            className={styles.containerUserLocation}>
+                            <Image source={icons.to} className={styles.iconLocations}/>
+                            <Text className={styles.locations}>
+                                {userAddress}
+                            </Text>
+                        </View>
 
-                    <View className={styles.subContainer}>
-                        <Text className={styles.label}>Pickup Time</Text>
-                        <Text className={styles.subLabel}>
-                            {functions.formatDateTime(driverDetails?.time! || 5)}
-                        </Text>
+                        <View className={styles.containerDestinationLocation}>
+                            <Image source={icons.point} className={styles.iconLocations}/>
+                            <Text className={styles.locations}>
+                                {destinationAddress}
+                            </Text>
+                        </View>
                     </View>
-
-                    <View className={styles.containerSeats}>
-                        <Text className={styles.label}>Car Seats</Text>
-                        <Text className={styles.subLabel}>
-                            {driverDetails?.car_seats}
-                        </Text>
-                    </View>
-                </View>
-
-                <View className={styles.containerLocations}>
-                    <View
-                        className={styles.containerUserLocation}>
-                        <Image source={icons.to} className={styles.iconLocations}/>
-                        <Text className={styles.locations}>
-                            {userAddress}
-                        </Text>
-                    </View>
-
-                    <View className={styles.containerDestinationLocation}>
-                        <Image source={icons.point} className={styles.iconLocations}/>
-                        <Text className={styles.locations}>
-                            {destinationAddress}
-                        </Text>
-                    </View>
-                </View>
-								
-								<Payment />
-            </>
-        </RideLayout>
+                                    
+                                    <Payment />
+                </>
+            </RideLayout>
+        </Stripe>
     )
 }
 
