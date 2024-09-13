@@ -31,7 +31,7 @@ export default function RideLayout({
 						/>
 						<Text className={styles.textBack}>{title || "Go Back"}</Text>
 					</View>
-					<GoogleMap />
+					<GoogleMap userLocation={false}/>
 				</View>
 				<BottomSheet
 					keyboardBehavior={"extend"}

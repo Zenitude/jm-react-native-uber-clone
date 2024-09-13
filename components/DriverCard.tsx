@@ -40,7 +40,7 @@ export default function DriverCard({item, selected, setSelected}: DriverCardProp
                     </Text>
 
                     <Text className={styles.time}>
-                        {functions.formatDateTime(item.time! || 5)}
+                        {functions.formatDateTime(parseInt(`${item.time}`) || 5)}
                     </Text>
 
                     <Text className={styles.separator}>

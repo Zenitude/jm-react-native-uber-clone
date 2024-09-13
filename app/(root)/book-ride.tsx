@@ -60,7 +60,7 @@ export default function BookRide() {
                         <View className={styles.subContainer}>
                             <Text className={styles.label}>Pickup Time</Text>
                             <Text className={styles.subLabel}>
-                                {functions.formatDateTime(driverDetails?.time! || 5)}
+                                {functions.formatDateTime(parseInt(`${driverDetails?.time}`) || 5)}
                             </Text>
                         </View>
 
@@ -89,7 +89,13 @@ export default function BookRide() {
                         </View>
                     </View>
                                     
-                                    <Payment />
+                    <Payment 
+                        fullName={user?.fullName!} 
+                        email={user?.emailAddresses[0].emailAddress!}
+                        amount={driverDetails?.price!}
+                        driverId={driverDetails?.id}
+                        rideTime={driverDetails?.time}
+                    />
                 </>
             </RideLayout>
         </Stripe>

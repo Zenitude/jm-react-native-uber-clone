@@ -3,25 +3,66 @@ import Button from "./Button"
 import { Alert } from "react-native"
 import { functions } from "@/constants"
 import { useStripe } from "@stripe/stripe-react-native"
+import { fetchAPI } from "@/lib/fetch"
 
-export default function Payment() {
+export default function Payment({
+	fullName,
+	email,
+	amount,
+	driverId,
+	rideTime,
+}: {
+	fullName: string,
+	email: string,
+	amount: string,
+	driverId: number | undefined,
+	rideTime: number | undefined,
+}) {
 	const [success, setSuccess] = useState(false)
 	const { initPaymentSheet, presentPaymentSheet } = useStripe()
 
-	const confirmHandler = async (
-		paymentMethod,
-		shouldSavePaymentMethod,
-		intentCreationCallback,
-	) => {
-		// Make a request to your own server.
-    const myServerResponse = await fetch(...);
-    // Call the `intentCreationCallback` with your server response's client secret or error
-    const { clientSecret, error } = await response.json();
-    if (clientSecret) {
-      intentCreationCallback({clientSecret})
-    } else {
-      intentCreationCallback({error})
-    }
+	const confirmHandler = async (paymentMethod, _, intentCreationCallback) => {
+		const { paymentIntent, customer } = await fetchAPI(
+			"/(api)/(stripe)/create",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					name: fullName || email.split("@")[0],
+					email: email,
+					amount: amount,
+					paymentMethodId: paymentMethod.id,
+				}),
+			},
+		)
+
+		if (paymentIntent.client_secret) {
+			const { result } = await fetchAPI("/(api)/(stripe)/pay", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					payment_method_id: paymentMethod.id,
+					payment_intent_id: paymentIntent.id,
+					customer_id: customer,
+				}),
+			})
+
+			if (result.client_secret) {
+					
+			}
+		}
+
+		// Call the `intentCreationCallback` with your server response's client secret or error
+		const { clientSecret, error } = await response.json()
+		if (clientSecret) {
+			intentCreationCallback({ clientSecret })
+		} else {
+			intentCreationCallback({ error })
+		}
 	}
 
 	const initializePaymentSheet = async () => {

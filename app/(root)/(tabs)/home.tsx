@@ -128,7 +128,7 @@ export default function Home() {
 
 						<>
 							<Text className={styles.title}>Your current Location</Text>
-							{ hasPermissions 
+							{ hasPermissions && addressUser.number !== null
 							  ? (
 										<>
 									  	<Text className={styles.currentLocation}>{`${addressUser.number} ${addressUser.street} ${addressUser.postalcode}, ${addressUser.city}`}</Text>
@@ -138,7 +138,7 @@ export default function Home() {
 								: (<Text>Geolocalisation not activated</Text>)
 							}
 							<View className={styles.containerSub}>
-								<GoogleMap />
+								<GoogleMap userLocation={true} />
 							</View>
 						</>
 						<Text className={styles.title}>Recent Rides</Text>
