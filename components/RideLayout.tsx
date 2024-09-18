@@ -1,4 +1,4 @@
-import { View, Text } from "react-native"
+import { View } from "react-native"
 import React, { useRef } from "react"
 import { router } from "expo-router"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -24,14 +24,14 @@ export default function RideLayout({
 				<View className={styles.background}>
 					<View className={styles.top}>
 						<Button
-							type={"image"}
+							type={"imageLabel"}
 							srcImage={icons.arrowBack}
+							textButton={title || "Go Back"}
 							styles={stylesButtonBack}
 							action={() => router.back()}
 						/>
-						<Text className={styles.textBack}>{title || "Go Back"}</Text>
 					</View>
-					<GoogleMap userLocation={false}/>
+					<GoogleMap userLocation={false} />
 				</View>
 				<BottomSheet
 					keyboardBehavior={"extend"}
@@ -52,10 +52,11 @@ const styles = {
 	container: "flex-1 bg-white",
 	background: "flex flex-col h-screen bg-blue-500",
 	top: "flex flex-row absolute z-10 top-16 items-center justify-start px-5",
-	textBack: "text-xl font-JakartaSemiBold ml-5",
 }
 
 const stylesButtonBack = {
-	container: "w-10 h-10 bg-white rounded-full items-center justify-center",
+	container:
+		"flex flex-row w-10 h-10 bg-white rounded-full items-center justify-center",
 	image: "w-6 h-6",
+	text: "text-xl font-JakartaSemiBold ml-5",
 }

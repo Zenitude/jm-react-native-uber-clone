@@ -7,7 +7,7 @@ export default function Stripe({ children }: { children: React.ReactElement }) {
 		<StripeProvider
 			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
 			merchantIdentifier="merchant.uber.com" // required for Apple Pay
-			urlScheme="jm-uber-clone" // required for 3D Secure and bank redirects
+			urlScheme="myapp" // required for 3D Secure and bank redirects
 		>
 			{children}
 		</StripeProvider>

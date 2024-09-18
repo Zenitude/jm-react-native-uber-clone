@@ -17,48 +17,35 @@ export default function Button({
 	IconLeft,
 	IconRight,
 }: ButtonProps) {
-	const children = () => {
-		if (type === "text") {
-			return (
+	return (
+		<>
+			<View className={`${styles.container} ${variantStyles?.container}`}>
+				<TouchableOpacity
+					className={`${styles.button} ${variantStyles?.button}`}
+					onPress={action}
+				>
+					{IconLeft && <IconLeft />}
+					{(type === "full" || type === "image" || type === "imageLabel") && (
+						<Image
+							source={srcImage}
+							resizeMode="contain"
+							className={styles.image}
+						/>
+					)}
+					{(type === "full" || type === "text") && (
+						<Text className={`${styles.text} ${variantStyles?.text}`}>
+							{textButton}
+						</Text>
+					)}
+					{IconRight && <IconRight />}
+				</TouchableOpacity>
+			</View>
+			{type === "imageLabel" && (
 				<Text className={`${styles.text} ${variantStyles?.text}`}>
 					{textButton}
 				</Text>
-			)
-		} else if (type === "image") {
-			return (
-				<Image
-					source={srcImage}
-					resizeMode="contain"
-					className={styles.image}
-				/>
-			)
-		} else if (type === "full") {
-			return (
-				<>
-					<Image
-						source={srcImage}
-						resizeMode="contain"
-						className={styles.image}
-					/>
-					<Text className={`${styles.text} ${variantStyles?.text}`}>
-						{textButton}
-					</Text>
-				</>
-			)
-		}
-	}
-
-	return (
-		<View className={`${styles.container} ${variantStyles?.container}`}>
-			<TouchableOpacity
-				className={`${styles.button} ${variantStyles?.button}`}
-				onPress={action}
-			>
-				{IconLeft && <IconLeft />}
-				{children()}
-				{IconRight && <IconRight />}
-			</TouchableOpacity>
-		</View>
+			)}
+		</>
 	)
 }
 

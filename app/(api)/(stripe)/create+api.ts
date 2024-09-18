@@ -9,10 +9,8 @@ export async function POST(request: Request) {
     const { name, email, amount } = body
     if(!name || !email || !amount) {
       return new Response(
-        JSON.stringify({
-          error: "Please enter a valid email address", 
-          status: 400
-        })
+        JSON.stringify({ error: "Please enter a valid email address" }),
+        { status: 400 }
       )
     }
 
@@ -47,13 +45,13 @@ export async function POST(request: Request) {
     });
 
     return new Response(JSON.stringify({
-      paymentIntent: paymentIntent.client_secret,
-      ephemeralKey: ephemeralKey.secret,
+      paymentIntent: paymentIntent,
+      ephemeralKey: ephemeralKey,
       customer: customer.id,
     }))
   }
   catch(error) {
     console.log(error)
-    return Response.json({error: error, status: 500})
+    return new Response(JSON.stringify({ error: error }), { status: 500 })
   }
 }

@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react"
+/* eslint-disable prettier/prettier */
+import React, { useState } from "react"
 import Button from "./Button"
-import { Alert } from "react-native"
-import { functions } from "@/constants"
+import { Alert, View, Image, Text } from "react-native"
+import { functions, images } from "@/constants"
 import { useStripe } from "@stripe/stripe-react-native"
 import { fetchAPI } from "@/lib/fetch"
+import { useLocationStore } from "@/store"
+import { useAuth } from "@clerk/clerk-expo"
+import ReactNativeModal from "react-native-modal"
+import { router } from "expo-router"
 
 export default function Payment({
 	fullName,
@@ -18,51 +23,29 @@ export default function Payment({
 	driverId: number | undefined,
 	rideTime: number | undefined,
 }) {
-	const [success, setSuccess] = useState(false)
 	const { initPaymentSheet, presentPaymentSheet } = useStripe()
+	const {
+		userAddress,
+		userLongitude,
+		userLatitude,
+		destinationAddress,
+		destinationLatitude,
+		destinationLongitude,
+	} = useLocationStore()
 
-	const confirmHandler = async (paymentMethod, _, intentCreationCallback) => {
-		const { paymentIntent, customer } = await fetchAPI(
-			"/(api)/(stripe)/create",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					name: fullName || email.split("@")[0],
-					email: email,
-					amount: amount,
-					paymentMethodId: paymentMethod.id,
-				}),
-			},
-		)
+	const { userId } = useAuth()
+	const [success, setSuccess] = useState(false)
 
-		if (paymentIntent.client_secret) {
-			const { result } = await fetchAPI("/(api)/(stripe)/pay", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					payment_method_id: paymentMethod.id,
-					payment_intent_id: paymentIntent.id,
-					customer_id: customer,
-				}),
-			})
-
-			if (result.client_secret) {
-					
-			}
-		}
-
-		// Call the `intentCreationCallback` with your server response's client secret or error
-		const { clientSecret, error } = await response.json()
-		if (clientSecret) {
-			intentCreationCallback({ clientSecret })
+	const openPaymentSheet = async () => {
+		const init = await initializePaymentSheet()
+		const { error } = await presentPaymentSheet()
+		console.log(init)
+		if (error) {
+			Alert.alert(`Error code : ${error.code}`, error.message)
 		} else {
-			intentCreationCallback({ error })
+			setSuccess(true)
 		}
+
 	}
 
 	const initializePaymentSheet = async () => {
@@ -70,29 +53,73 @@ export default function Payment({
 			merchantDisplayName: "Example, Inc.",
 			intentConfiguration: {
 				mode: {
-					amount: 55,
+					amount: parseInt(amount) * 100,
 					currencyCode: "USD",
 				},
-				confirmHandler: confirmHandler,
+				confirmHandler: async (paymentMethod, _, intentCreationCallback) => {
+					const { paymentIntent, customer } = await fetchAPI(
+						"/(api)/(stripe)/create",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({
+								name: fullName || email.split("@")[0],
+								email: email,
+								amount: amount,
+								paymentMethodId: paymentMethod.id,
+							}),
+						},
+					)
+
+					if (paymentIntent.client_secret) {
+						const { result } = await fetchAPI("/(api)/(stripe)/pay", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({
+								payment_method_id: paymentMethod.id,
+								payment_intent_id: paymentIntent.id,
+								customer_id: customer,
+								client_secret: paymentIntent.client_secret
+							}),
+						})
+
+						if (result.client_secret) {
+							await fetchAPI("/(api)/ride/create", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+								},
+								body: JSON.stringify({
+									origin_address: userAddress,
+									destination_address: destinationAddress,
+									origin_latitude: userLatitude,
+									origin_longitude: userLongitude,
+									destination_latitude: destinationLatitude,
+									destination_longitude: destinationLongitude,
+									ride_time: rideTime?.toFixed(0),
+									fare_price: parseInt(amount) * 100,
+									payment_status: "paid",
+									driver_id: driverId,
+									user_id: userId,
+								}),
+							})
+							console.log("ok before intentCreationCallback : ", result.client_secret)
+							intentCreationCallback({
+								clientSecret: result.client_secret,
+							})
+							console.log("ok after intentCreationCallback")
+						}
+					}
+				},
 			},
+			returnURL: "myapp://book-ride",
 		})
 		if (error) {
-			// handle error
-		}
-	}
-
-	const openPaymentSheet = async () => {
-		await initializePaymentSheet()
-		const { error } = await presentPaymentSheet()
-
-		if (error) {
-			if (error) {
-				Alert.alert(`Error code : ${error.code}`, error.message)
-			} else {
-				setSuccess(true)
-			}
-		} else {
-			// Payment completed - show a confirmation screen.
+			console.log(error)
 		}
 	}
 
@@ -101,22 +128,59 @@ export default function Payment({
 			<Button
 				type={"text"}
 				textButton={"Confirm Ride"}
-				styles={stylesButtonConfirm}
-				variantStyles={stylesButtonConfirmVariant}
+				styles={stylesButton}
+				variantStyles={stylesButtonVariant}
 				action={openPaymentSheet}
 			/>
+
+			<ReactNativeModal
+				isVisible={success}
+				onBackdropPress={() => setSuccess(false)}
+			>
+				<View className={styles.contentModal}>
+					<Image
+						source={images.check}
+						resizeMode={"contain"}
+						className={styles.imageModal}
+					/>
+					<Text className={styles.firstTextModal}>Ride booked !</Text>
+					<Text className={styles.secondTextModal}>
+						Thank you for your booking. Your reservation has been placed.
+						Please proceed with your trip!
+					</Text>
+					<Button 
+						type={"text"}
+						textButton={"Back Home"}
+						styles={stylesButton}
+						variantStyles={stylesButtonVariant}
+						action={() => {
+							setSuccess(false)
+							router.push("/(root)/(tabs)/home")
+						}}
+					/>
+				</View>
+			</ReactNativeModal>
 		</>
 	)
 }
 
-const stylesButtonConfirm = {
+const styles = {
+	contentModal:
+		"flex flex-col items-center justify-center bg-white p-7 rounded-2xl",
+	imageModal: "w-28 h-28 mt-5",
+	firstTextModal: "text-2xl text-center font-JakartaBold mt-5",
+	secondTextModal:
+		"text-md text-general-200 font-JakartaMedium text-center mt-3",
+}
+
+const stylesButton = {
 	container:
 		"w-full rounded-full flex flex-row p-3 shadow-md shadow-neutral-400/70 mb-10 mt-5",
 	button: "w-full justify-center items-center",
 	text: "text-lg font-bold",
 }
 
-const stylesButtonConfirmVariant = {
+const stylesButtonVariant = {
 	container: functions.getBgVariantStyle("primary"),
 	text: functions.getTextVariantStyle("default"),
 }

@@ -1,15 +1,17 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from "react"
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps"
 import { useDriverStore, useLocationStore } from "@/store"
+import { icons } from "@/constants"
+import { Driver, MarkerData } from "@/types/global"
+import { useFetch } from "@/lib/fetch"
+import { ActivityIndicator, View, Text } from "react-native"
+import MapViewDirections from "react-native-maps-directions"
 import {
 	calculateDriverTimes,
 	calculateRegion,
 	generateMarkersFromData,
 } from "@/lib/map"
-import { icons } from "@/constants"
-import { Driver, MarkerData } from "@/types/global"
-import { useFetch } from "@/lib/fetch"
-import { ActivityIndicator, View, Text } from "react-native"
 
 export default function GoogleMap({ userLocation }: { userLocation: boolean }) {
 	const { data: drivers, loading, error } = useFetch<Driver[]>("/(api)/driver")
@@ -44,7 +46,7 @@ export default function GoogleMap({ userLocation }: { userLocation: boolean }) {
 			setMarkers(newMarkers)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [drivers])
+	}, [drivers, userLatitude, userLongitude])
 
 	useEffect(() => {
 		if (markers.length > 0 && destinationLatitude && destinationLongitude) {
@@ -88,8 +90,9 @@ export default function GoogleMap({ userLocation }: { userLocation: boolean }) {
 			showsUserLocation={userLocation}
 			userInterfaceStyle={"light"}
 		>
-			{markers.map((marker) => (
+			{markers.map((marker, index) => (
 				<Marker
+					key={index}
 					coordinate={{
 						latitude: marker.latitude,
 						longitude: marker.longitude,
@@ -100,6 +103,34 @@ export default function GoogleMap({ userLocation }: { userLocation: boolean }) {
 					}
 				/>
 			))}
+
+			{destinationLatitude && destinationLongitude && (
+				<>
+					<Marker
+						key="destination"
+						coordinate={{
+							latitude: destinationLatitude,
+							longitude: destinationLongitude,
+						}}
+						title="Destination"
+						image={icons.pin}
+					/>
+
+					<MapViewDirections
+						origin={{
+							latitude: userLatitude,
+							longitude: userLongitude,
+						}}
+						destination={{
+							latitude: destinationLatitude,
+							longitude: destinationLongitude,
+						}}
+						apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY!}
+						strokeColor={"#0286FF"}
+						strokeWidth={2}
+					/>
+				</>
+			)}
 		</MapView>
 	)
 }

@@ -1,7 +1,7 @@
-import { useUser } from "@clerk/clerk-expo"
+import { useAuth, useUser } from "@clerk/clerk-expo"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { FlatList, View, Text, Image, ActivityIndicator } from "react-native"
-import { images, icons, recentRides } from "@/constants"
+import { images, icons } from "@/constants"
 import RideCard from "@/components/RideCard"
 import { useEffect, useState } from "react"
 import Button from "@/components/Button"
@@ -9,8 +9,9 @@ import GoogleTextInput from "@/components/GoogleTextInput"
 import GoogleMap from "@/components/GoogleMap"
 import { useLocationStore } from "@/store"
 import * as Location from "expo-location"
-import { addressType, setLocationType } from "@/types/global"
+import { addressType, Ride, setLocationType } from "@/types/global"
 import { router, Href } from "expo-router"
+import { useFetch } from "@/lib/fetch"
 
 export default function Home() {
 	const { setUserLocation, setDestinationLocation } = useLocationStore()
@@ -24,10 +25,14 @@ export default function Home() {
 		country: null,
 	}) 
 	const { user } = useUser()
-	const [loading] = useState(false)
+	const { data : recentRides, loading } = useFetch(`/(api)/ride/${user?.id}`)
 	const [hasPermissions, setHasPermissions] = useState(false)
+	const { signOut } = useAuth()
 
-	const signOut = () => {}
+	const handleSignOut = () => {
+		signOut()
+		router.replace("/(auth)/sign-in")
+	}
 
 	const searchDestination = (location: setLocationType) => {
 		setDestinationLocation(location)
@@ -51,7 +56,7 @@ export default function Home() {
 				latitude: location.coords?.latitude!,
 				longitude: location.coords?.longitude!
 			})
-			console.log(`lat: ${location.coords.latitude}, long: ${location.coords.longitude}`)
+
 			const { name, street, postalCode, city, region, subregion, country } = address[0]
 			setUserLocation({
 				latitude: location.coords.latitude!,
@@ -77,7 +82,7 @@ export default function Home() {
 	return (
 		<SafeAreaView className={styles.area}>
 			<FlatList
-				data={recentRides.slice(0, 5)}
+				data={(recentRides as Ride[])?.slice(0, 5)}
 				renderItem={({ item }) => <RideCard ride={item} />}
 				className={styles.list}
 				keyboardShouldPersistTaps={"handled"}
@@ -116,7 +121,7 @@ export default function Home() {
 								type="image"
 								styles={stylesButtonLogout}
 								srcImage={icons.out}
-								action={signOut}
+								action={handleSignOut}
 							/>
 						</View>
 
