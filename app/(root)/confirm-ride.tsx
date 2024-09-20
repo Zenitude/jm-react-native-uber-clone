@@ -2,7 +2,6 @@
 import { View, Text, FlatList } from "react-native"
 import React from "react"
 import RideLayout from "@/components/RideLayout"
-import { functions } from "@/constants"
 import DriverCard from "@/components/DriverCard"
 import Button from "@/components/Button"
 import { Href, router } from "expo-router"
@@ -50,6 +49,6 @@ const stylesButtonSelect = {
 }
 
 const stylesButtonSelectVariant = {
-	container: functions.getBgVariantStyle("primary"),
-	text: functions.getTextVariantStyle("default"),
+	container: "bg-primary-600",
+	text: "text-primary-100",
 }

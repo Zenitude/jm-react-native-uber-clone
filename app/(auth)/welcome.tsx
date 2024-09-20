@@ -81,6 +81,6 @@ const stylesSwitchButton = {
 }
 
 const stylesSwitchVariant = {
-	container: "", //functions.getBgVariantStyle("primary"),
-	text: "", //functions.getTextVariantStyle("default"),
+	container: "bg-primary-600",
+	text: "text-primary-100",
 }

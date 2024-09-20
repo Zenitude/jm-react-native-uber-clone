@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, Image, Alert } from "react-native"
+import { View, Text, Image } from "react-native"
 import Button from "./Button"
 import { useCallback } from "react"
 import { functions, icons } from "@/constants"

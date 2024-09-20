@@ -4,7 +4,7 @@ import React from "react"
 import { useLocationStore } from "@/store"
 import RideLayout from "@/components/RideLayout"
 import GoogleTextInput from "@/components/GoogleTextInput"
-import { functions, icons } from "@/constants"
+import { icons } from "@/constants"
 import Button from "@/components/Button"
 import { Href, router } from "expo-router"
 
@@ -66,6 +66,6 @@ const stylesButtonFind = {
 }
 
 const stylesButtonFindVariant = {
-	container: functions.getBgVariantStyle("primary"),
-	text: functions.getTextVariantStyle("default"),
+	container: "bg-primary-600",
+	text: "text-primary-100",
 }

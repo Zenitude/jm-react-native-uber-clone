@@ -1,5 +1,5 @@
 import { Text, ScrollView, View, Image, Alert } from "react-native"
-import { images, icons, functions } from "@/constants"
+import { images, icons } from "@/constants"
 import { Link, router } from "expo-router"
 import { useState } from "react"
 import { useSignUp } from "@clerk/clerk-expo"
@@ -261,11 +261,11 @@ const stylesButton = {
 }
 
 const stylesButtonVariant = {
-	container: functions.getBgVariantStyle("primary"),
-	text: functions.getTextVariantStyle("default"),
+	container: "bg-primary-600",
+	text: "text-primary-100",
 }
 
 const stylesButtonVerifyVariant = {
-	container: functions.getBgVariantStyle("success"),
-	text: functions.getTextVariantStyle("default"),
+	container: "bg-primary-600",
+	text: "text-primary-100",
 }
