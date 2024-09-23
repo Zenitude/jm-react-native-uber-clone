@@ -45,7 +45,6 @@ export default function SignUp() {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onPressVerify = async () => {
 		if (!isLoaded) return
 
@@ -197,7 +196,7 @@ export default function SignUp() {
 						<Button
 							type={"text"}
 							styles={stylesButton}
-							variantStyles={stylesButtonVerifyVariant}
+							variantStyles={stylesButtonVariant}
 							action={onPressVerify}
 							textButton={"Verify Email"}
 						/>
@@ -261,11 +260,6 @@ const stylesButton = {
 }
 
 const stylesButtonVariant = {
-	container: "bg-primary-600",
-	text: "text-primary-100",
-}
-
-const stylesButtonVerifyVariant = {
 	container: "bg-primary-600",
 	text: "text-primary-100",
 }

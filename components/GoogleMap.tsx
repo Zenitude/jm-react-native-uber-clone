@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from "react"
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps"
@@ -45,7 +46,6 @@ export default function GoogleMap({ userLocation }: { userLocation: boolean }) {
 
 			setMarkers(newMarkers)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [drivers, userLatitude, userLongitude])
 
 	useEffect(() => {
@@ -60,7 +60,6 @@ export default function GoogleMap({ userLocation }: { userLocation: boolean }) {
 				setDrivers(drivers as MarkerData[])
 			})
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [destinationLatitude, destinationLongitude, markers])
 
 	if (loading || !userLatitude || !userLongitude) {

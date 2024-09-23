@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { View, Image } from "react-native"
 import React from "react"
 import { GoogleInputProps } from "@/types/global"
@@ -50,7 +51,6 @@ export default function GoogleTextInput({
 				}}
 				onPress={(data, details = null) => 
 					handlePress({
-						// eslint-disable-next-line prettier/prettier
 						latitude: details?.geometry.location.lat!, 
 						longitude: details?.geometry.location.lng!, 
 						address: data.description

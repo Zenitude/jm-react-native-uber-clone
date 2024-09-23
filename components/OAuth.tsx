@@ -2,7 +2,7 @@
 import { View, Text, Image } from "react-native"
 import Button from "./Button"
 import { useCallback } from "react"
-import { functions, icons } from "@/constants"
+import { icons } from "@/constants"
 import { useOAuth } from "@clerk/clerk-expo"
 import { googleOAuth } from "@/lib/auth"
 import { router } from "expo-router"
@@ -64,6 +64,6 @@ const stylesButton = {
 }
 
 const stylesButtonVariant = {
-	container: functions.getBgVariantStyle("outline"),
-	text: functions.getTextVariantStyle("primary"),
+	container: "border-1 border-primary-600 bg-white",
+	text: "text-primary-100",
 }

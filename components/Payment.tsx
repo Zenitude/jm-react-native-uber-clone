@@ -2,7 +2,7 @@
 import React, { useState } from "react"
 import Button from "./Button"
 import { Alert, View, Image, Text } from "react-native"
-import { functions, images } from "@/constants"
+import { images } from "@/constants"
 import { useStripe } from "@stripe/stripe-react-native"
 import { fetchAPI } from "@/lib/fetch"
 import { useLocationStore } from "@/store"
@@ -181,6 +181,6 @@ const stylesButton = {
 }
 
 const stylesButtonVariant = {
-	container: functions.getBgVariantStyle("primary"),
-	text: functions.getTextVariantStyle("default"),
+	container: "bg-primary-600",
+	text: "text-primary-100",
 }
